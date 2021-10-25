@@ -1,0 +1,32 @@
+server:
+  port: 88
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: auth_router
+          uri: lb://lf-auth
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+            - RewritePath=/(?<segment>.*),/$\{segment}
+
+        - id: mybatiPlus_router
+          uri: lb://lf-test-mybatisPlus
+          predicates:
+            - Path=/mybatis/**
+          filters:
+            - StripPrefix=1
+            - RewritePath=/(?<segment>.*),/$\{segment}
+
+  application:
+    name: lf-gateway

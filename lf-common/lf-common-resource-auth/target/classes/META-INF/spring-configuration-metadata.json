@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "auth.path",
+      "type": "com.lf.common.resource.auth.AuthProperties",
+      "sourceType": "com.lf.common.resource.auth.AuthProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "auth.path.list",
+      "type": "java.util.List<java.lang.String>",
+      "description": "需要权限的路径列表.",
+      "sourceType": "com.lf.common.resource.auth.AuthProperties"
+    }
+  ],
+  "hints": []
+}

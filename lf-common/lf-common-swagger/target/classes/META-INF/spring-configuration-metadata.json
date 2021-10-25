@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "swagger",
+      "type": "com.lf.common.swagger.SwaggerProperties",
+      "sourceType": "com.lf.common.swagger.SwaggerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "swagger.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启swagger.",
+      "sourceType": "com.lf.common.swagger.SwaggerProperties"
+    }
+  ],
+  "hints": []
+}

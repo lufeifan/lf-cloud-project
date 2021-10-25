@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.lf.common.feign.LfSentinelFeignAutoConfiguration,\
+  com.lf.common.feign.LfHandelFeignException

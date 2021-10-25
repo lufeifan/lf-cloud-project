@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/lf-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-code-generate/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-code-generate/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-cache/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-cache/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-datasource/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-datasource/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-entity/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-entity/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-feign/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-feign/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-log/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-log/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-mybatisPlus/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-mybatisPlus/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-resource-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-resource-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-swagger/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-common/lf-common-swagger/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-gateway/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-system/lf-system-admin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-system/lf-system-admin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-system/lf-system-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-auth/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-feign/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-feign/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-log/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-log/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-mybatisPlus/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/lf-test/lf-test-mybatisPlus/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

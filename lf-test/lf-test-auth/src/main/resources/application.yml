@@ -1,0 +1,8 @@
+server:
+  port: 11006
+auth:
+  path:
+    list: /auth/**
+spring:
+  application:
+    name: lf-test-log

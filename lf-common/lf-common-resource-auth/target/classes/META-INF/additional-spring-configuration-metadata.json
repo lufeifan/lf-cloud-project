@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "auth.path.list",
+      "type": "java.util.List",
+      "description": "需要权限的路径列表."
+    }
+  ]
+}

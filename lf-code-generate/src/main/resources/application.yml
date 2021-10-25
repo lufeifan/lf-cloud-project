@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: lf-generator
+  thymeleaf:
+    prefix: classpath:/static/
+
+  mvc:
+    static-path-pattern: /generator/static/**

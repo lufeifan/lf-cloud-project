@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lf-project</artifactId>
+        <groupId>com.lf</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>lf-common</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>lf-common-core</module>
+        <module>lf-common-entity</module>
+        <module>lf-common-resource-auth</module>
+        <module>lf-common-log</module>
+        <module>lf-common-swagger</module>
+        <module>lf-common-feign</module>
+        <module>lf-common-cache</module>
+        <module>lf-common-mybatisPlus</module>
+        <module>lf-common-datasource</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>3.4.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>3.4.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

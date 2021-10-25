@@ -1,0 +1,194 @@
+package com.lf;
+
+/**
+ * 需求文档
+ *
+ * @author lufeifan
+ * @date 2021/10/21 18:59
+ **/
+public class Project {
+    /**
+     *   version 1.0
+     *   版本：
+     *    spring-boot: 2.4.2
+     *    spring-cloud: 2020.0.1
+     *    spring-cloud-alibaba: 2021.1
+     *    jdk: 1.8
+     *    maven: 3.6
+     *  LF 框架
+     *   1. 项目结构
+     *      lf-auth 统一认证中心，进行身份登录认证
+     *      lf-gateway 网关
+     *      lf-common  通用模块
+     *          lf-common-core 通用核心包
+     *          lf-common-entity 通用实体类
+     *          lf-common-resource-auth 通用资源服务器认证
+     *          lf-common-log 通用日志模块
+     *          lf-common-swagger 通用swagger配置
+     *          lf-common-feign  通用feign 封装
+     *          lf-common-cache  通用缓存封装
+     *          lf-common-mybatisPlus 通用mybatis-plus封装
+     *          lf-common-datasource 动态数据源封装
+     *
+     *      lf-code-generate 代码生成
+     *
+     *      lf-system:
+     *          lf-system-admin:
+     *              UserController:
+     *                  GET system/user/selectOne?username=xxx
+     *                  POST system/user/saveUser         {SysUser}
+     *                  DELETE system/user/delUser?username=xxx
+     *                  PUT system/user/updateUser       {SysUser}
+     *                  GET system/user/userList        {pageSize,currentPage}
+     *
+     *              LogController:
+     *                  POST system/log/saveLog         {SysLog}
+     *                  GET system/log/logList          {pageSize,currentPage}
+     *
+     *              RoleController:
+     *                  GET system/role/roleList        {pageSize,currentPage}
+     *                  POST system/role/saveRole        {SysRole}
+     *                  PUT system/role/updateRole      {SysRole}
+     *                  DELETE system/role/delRole?role=xxx
+     *                  GET system/role/selectOne?role=xxx
+     *              PermissionController:
+     *                  GET system/permission/permissionList
+     *                  ...
+     *
+     *              server:
+     *                  SysUserService:
+     *                      getUserInfo:
+     *
+     *                  SysRoleService:
+     *
+     *                  SysPermissionService:
+     *
+     *                  SysRolePermissionService:
+     *                      getPermissionByRole(int RoleId);
+     *
+     *                问题：
+     *                  如何解决分页？
+     *
+     *
+     *          lf-system-api:
+     *              LogFeign:
+     *                  saveLog:
+     *              UserFeign:
+     *                  userInfo:
+     *                  getUserDetail:
+     *
+     *       lf-test 测试模块
+     *          lf-test-xxx xxx 模块测试
+     *
+     *   2. lf-auth
+     *      用户登录接口
+     *          POST /auth/login || username,password
+     *          return token
+     *      获取用户信息
+     *          1.通过用户名获取
+     *          GET /auth/userInfo?username=xxx
+     *          return UserInfo
+     *          2.通过token获取
+     *       扩展：
+     *          验证码，非密码模式
+     *
+     *       lf-gateway
+     *          swagger聚合项目文档
+     *          各个模块的路由规则
+     *          扩展：
+     *              流量控制
+     *        lf-common：
+     *          lf-common-core：
+     *              1.统一然后结果封装
+     *              2.通用工具类封装
+     *              3.异常
+     *          lf-common-entity:
+     *              1.SystemLog
+     *              2.SystemUser
+     *          lf-common-resource-auth:
+     *              JwtTokenStore
+     *              SecurityConfig
+     *              ResourceConfig
+     *              方法级别权限控制
+     *          lf-common-log:
+     *              annotated:
+     *                  EnableLfLog
+     *              aspect:
+     *                  LogAspect  -> 通过spring 监听事件记录日志
+     *              service:
+     *                  LogService -> 调用日志存储服务
+     *          lf-common-feign：
+     *              整合sentinel 做降级处理
+     *              扩展： 配置服务是内部调用还是外部调用，内部调用不需要权限认证
+     *           lf-common-cache：
+     *              redis -> 序列化配置 ，通用CURD方法封装
+     *           lf-common-mybatisPlus:
+     *              分页配置
+     *              自动填充配置
+     *              扩展：Sql注入问题
+     *
+     *           lf-common-datasource：
+     *              动态数据源
+     *
+     *    3.数据库设计：
+     *        sys_log:
+     *          id 主键
+     *          url 访问地址
+     *          method 访问方式
+     *          username 访问者
+     *          create_time 访问时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *        sys_user:
+     *          id 主键
+     *          username 用户名
+     *          password 密码
+     *          email 邮箱
+     *          phone 手机号
+     *          sex  性别
+     *          address_id 地址id
+     *          create_time 创建时间
+     *          update_time 更新时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *        sys_role:
+     *          id 主键
+     *          role_name 角色名
+     *          create_time 创建时间
+     *          update_time 更新时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *        sys_user_role:
+     *          id 主键
+     *          user_id 用户id
+     *          role_id 角色id
+     *          create_time 创建时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *       sys_permission:
+     *          id 主键
+     *          permission_name 权限名称 simple-》  auth:user:save
+     *                                            auth:user:userInfo
+     *                                            sys:log:save
+     *          create_time 创建时间
+     *          update_time 更新时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *       sys_permission_role:
+     *          id 主键
+     *          role_id 角色id
+     *          permission_id 权限id
+     *          create_time 创建时间
+     *          is_delete 是否删除 0未删除，1删除
+     *
+     *        sys_address:
+     *          id 主键
+     *          city 城市
+     *          area 地区
+     *          create_time 创建时间
+     *          update_time 更新时间
+     *          is_delete 是否删除 0未删除，1删除
+
+     *
+     */
+}
