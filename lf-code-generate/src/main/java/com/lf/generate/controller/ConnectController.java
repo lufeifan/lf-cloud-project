@@ -1,14 +1,13 @@
 package com.lf.generate.controller;
 
 import com.lf.common.core.utils.R;
+import com.lf.generate.entity.ColumnInfo;
 import com.lf.generate.entity.DbInfo;
 import com.lf.generate.entity.TableInfo;
 import com.lf.generate.service.DbService;
 import org.apache.commons.configuration.ConfigurationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -28,16 +27,12 @@ public class ConnectController {
     @PostMapping("/tableInfo")
     public R tableInfo(@RequestBody DbInfo dbInfo) throws SQLException {
         List<TableInfo> tableInfos = dbService.tableInfo(dbInfo);
-        tableInfos.forEach(tableInfo -> {
-            try {
-                dbService.columninfo(dbInfo,tableInfo.getTableName()).forEach(System.out::println);
-                System.out.println();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            } catch (ConfigurationException e) {
-                e.printStackTrace();
-            }
-        });
-        return R.setData(dbInfo);
+        return R.setData(tableInfos);
+    }
+
+    @PostMapping("/columnInfo/{tableName}")
+    public R columnInfo(@RequestBody DbInfo dbInfo, @PathVariable String tableName) throws SQLException, ConfigurationException {
+        List<ColumnInfo> columnInfos = dbService.columnInfo(dbInfo,tableName);
+        return R.setData(columnInfos);
     }
 }

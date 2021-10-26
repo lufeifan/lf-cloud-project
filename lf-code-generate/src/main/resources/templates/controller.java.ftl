@@ -3,10 +3,10 @@ package ${packageName}.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import ${packageName}.entity.${className};
 import ${packageName}.service.${className}Service;
-import com.lf.common.group.AddGroup;
-import com.lf.common.group.AddUpdateGroup;
-import com.lf.common.group.UpdateGroup;
-import com.lf.common.utils.R;
+import com.lf.common.core.group.AddGroup;
+import com.lf.common.core.group.AddUpdateGroup;
+import com.lf.common.core.group.UpdateGroup;
+import com.lf.common.core.utils.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +18,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Arrays;
+
+/**
+*  @author ${userName}
+*  ${date}
+**/
 
 @Api(tags = "${tableRemarks?default("")}管理模块")
 @RestController

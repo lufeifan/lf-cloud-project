@@ -1,5 +1,6 @@
 package com.lf.generate.utils;
 
+import com.google.common.base.CaseFormat;
 import com.lf.generate.entity.ColumnInfo;
 import com.lf.generate.entity.DbInfo;
 import com.lf.generate.entity.TableInfo;
@@ -72,15 +73,18 @@ public class DbUtils {
 
             String column_name = columns.getString("COLUMN_NAME");
             columnInfo.setColumnName(column_name);
-//          将JDBC 类型转化为 Java 类型
+
             String remarks = columns.getString("REMARKS");
             columnInfo.setColumnRemarks(remarks);
 
             String type_name = columns.getString("TYPE_NAME");
             columnInfo.setColumnType(type_name);
 
+//          将JDBC 类型转化为 Java 类型
             String javaTypeName = propertiesConfiguration.getString(type_name.toLowerCase(), type_name);
-            columnInfo.setColumnJavaName(javaTypeName);
+            columnInfo.setColumnJavaType(javaTypeName);
+
+            columnInfo.setColumnJavaName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL,column_name));
 
             list.add(columnInfo);
         }

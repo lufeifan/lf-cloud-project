@@ -23,14 +23,17 @@ public class GenerateConfigServiceImpl implements GenerateConfigService {
 //       表信息
         List<TableInfo> tableInfoList = info.getTableInfo();
         for (TableInfo  tableInfo: tableInfoList) {
+            String tableName = tableInfo.getTableName();
 //            去除表前缀
             if (tableInfo.getIsRemovePrefix()) {
-                String tablePrefix = tableInfo.getTablePrefix();
+                String tablePrefix = tableName.split("_")[0];
                 if (Optional.ofNullable(tableInfo).isPresent()){
-                    String tableName = tableInfo.getTableName();
                     String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, StringUtils.stripStart(tableName, tablePrefix));
                     tableInfo.setClassName(className);
                 }
+            }else {
+                String className = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL,tableName);
+                tableInfo.setClassName(className);
             }
         }
         return info;

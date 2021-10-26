@@ -22,9 +22,4 @@ public class GenerateInfo {
      */
     private List<TableInfo> tableInfo;
 
-    /**
-     * 生成列信息
-     */
-    private List<ColumnInfo> columnInfos;
-
 }

@@ -6,9 +6,10 @@ import ${packageName}.mapper.${className}Mapper;
 import ${packageName}.service.${className}Service;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.lf.common.utils.PageUtils;
+import com.lf.common.core.utils.PageUtils;
+import com.lf.common.core.utils.Query;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.lf.common.utils.Query;
+
 import java.util.Map;
 
 /**

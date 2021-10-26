@@ -30,5 +30,5 @@ public interface DbService {
      * @throws SQLException
      * @throws ConfigurationException
      */
-    List<ColumnInfo> columninfo(DbInfo dbInfo,String tableName) throws SQLException, ConfigurationException;
+    List<ColumnInfo> columnInfo(DbInfo dbInfo,String tableName) throws SQLException, ConfigurationException;
 }

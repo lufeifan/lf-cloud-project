@@ -22,17 +22,16 @@ public class ${className} implements Serializable {
 <#if columnInfos ??>
     <#list columnInfos as li>
     /**
-    *   ${li.columnRemarks?default("")}
-    **/
+     *   ${li.columnRemarks?default("")}
+     **/
     <#if primaryKey??>
         <#if "${primaryKey}"==li.columnName>
     @TableId(type = IdType.AUTO)
         </#if>
     </#if>
-    @ApiModelProperty(value = "${li.columnRemarks?default("")} ")
-    private ${li.columnType} ${li.columnName};
+    @ApiModelProperty(value = "${li.columnRemarks?default("")}")
+    private ${li.columnJavaType} ${li.columnJavaName};
 
     </#list>
 </#if>
-
 }

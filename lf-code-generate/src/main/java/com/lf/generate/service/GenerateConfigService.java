@@ -2,8 +2,6 @@ package com.lf.generate.service;
 
 import com.lf.generate.entity.GenerateInfo;
 
-import java.util.Map;
-
 /**
  * 生成信息接口
  *

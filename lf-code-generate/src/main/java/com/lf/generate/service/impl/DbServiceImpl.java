@@ -30,7 +30,7 @@ public class DbServiceImpl implements DbService {
     }
 
     @Override
-    public List<ColumnInfo> columninfo(DbInfo dbInfo, String tableName) throws SQLException, ConfigurationException {
+    public List<ColumnInfo> columnInfo(DbInfo dbInfo, String tableName) throws SQLException, ConfigurationException {
         Connection conn = DbUtils.getConnect(dbInfo);
         List<ColumnInfo> infoList = DbUtils.getColumnInfo(conn, tableName);
         return infoList;

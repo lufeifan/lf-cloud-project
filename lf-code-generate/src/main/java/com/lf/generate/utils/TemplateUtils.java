@@ -1,18 +1,18 @@
 package com.lf.generate.utils;
 
 import com.google.common.base.CaseFormat;
-import com.lf.generate.entity.GenerateInfo;
+import com.lf.generate.entity.ConfigInfo;
+import com.lf.generate.entity.TableInfo;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -21,21 +21,52 @@ import java.util.zip.ZipOutputStream;
  */
 public class TemplateUtils {
 
-    public static ByteArrayOutputStream fillTemplate(GenerateInfo info, ByteArrayOutputStream outputStream){
-        List<Template> templateList;
-        try {
-            templateList = TemplateUtils.initTemplate();
+    public static ByteArrayOutputStream fillTemplate(ConfigInfo info, ByteArrayOutputStream outputStream) throws IOException, TemplateException {
+        List<Template> templateList = initTemplate();
+        List<TableInfo> tableInfoList = info.getTableInfoList();
+        for (TableInfo tableInfo : tableInfoList) {
+            Map<String, Object> mapData = getMapData(info, tableInfo);
             for (Template template : templateList) {
                 ZipOutputStream zip = new ZipOutputStream(outputStream);
-//                String path = TemplateUtils.initPath(template, info.getPackageName(), info.getClassName());
-//                zip.putNextEntry(new ZipEntry(path));
-                template.process(info, new OutputStreamWriter(zip));
+                String path = initPath(template, mapData.get("packageName").toString(), mapData.get("className").toString());
+                zip.putNextEntry(new ZipEntry(path));
+                template.process(mapData, new OutputStreamWriter(zip));
                 zip.closeEntry();
             }
-        } catch (IOException | TemplateException e) {
-            e.printStackTrace();
         }
         return outputStream;
+//        List<Template> templateList;
+//        try {
+//            templateList = TemplateUtils.initTemplate();
+//            for (Template template : templateList) {
+////                ZipOutputStream zip = new ZipOutputStream(outputStream);
+//                String path = TemplateUtils.initPath(template, info.getPackageName(), info.getClassName());
+////                zip.putNextEntry(new ZipEntry(path));
+////                template.process(info, new OutputStreamWriter(zip));
+////                zip.closeEntry();
+//            }
+//        } catch (IOException | TemplateException e) {
+//            e.printStackTrace();
+//        }
+//        return outputStream;
+    }
+
+    public static Map<String,Object> getMapData(ConfigInfo configInfo,TableInfo tableInfo){
+        Map<String,Object> map = new HashMap<>(20);
+        map.put("packageName",configInfo.getPackageName());
+        map.put("date",configInfo.getDate());
+        map.put("userName",configInfo.getUserName());
+        map.put("email",configInfo.getEmail());
+        map.put("moduleName",configInfo.getModuleName());
+//      表
+        map.put("tableName",tableInfo.getTableName());
+        map.put("tableRemarks",tableInfo.getTableRemarks());
+        map.put("primaryKey",tableInfo.getPrimaryKey());
+        map.put("className",tableInfo.getClassName());
+        map.put("tablePrefix",tableInfo.getTablePrefix());
+        map.put("isRemovePrefix",tableInfo.getIsRemovePrefix());
+        map.put("columnInfos",tableInfo.getColumnInfos());
+        return map;
     }
 
     /**
@@ -51,11 +82,12 @@ public class TemplateUtils {
         list.add(cfg.getTemplate("serviceImpl.java.ftl"));
         list.add(cfg.getTemplate("mapper.java.ftl"));
         list.add(cfg.getTemplate("controller.java.ftl"));
-        list.add(cfg.getTemplate("vue.java.ftl"));
-        list.add(cfg.getTemplate("addOrUpdate.java.ftl"));
-        list.add(cfg.getTemplate("api.java.ftl"));
-        list.add(cfg.getTemplate("sql.java.ftl"));
         return list;
+
+//        list.add(cfg.getTemplate("vue.java.ftl"));
+//        list.add(cfg.getTemplate("addOrUpdate.java.ftl"));
+//        list.add(cfg.getTemplate("api.java.ftl"));
+//        list.add(cfg.getTemplate("sql.java.ftl"));
     }
 
     /**

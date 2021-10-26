@@ -2,6 +2,8 @@ package com.lf.generate.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 数据库信息
  *
@@ -27,4 +29,5 @@ public class DbInfo {
      *  数据库驱动
      **/
     private String driverName;
+
 }

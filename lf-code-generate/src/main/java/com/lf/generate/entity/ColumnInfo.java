@@ -39,6 +39,11 @@ public class ColumnInfo {
     private String columnJavaName;
 
     /**
+     * 转化为 java 类型
+     */
+    private String columnJavaType;
+
+    /**
      * 是否是逻辑删除
      */
     private Boolean isLogicalDeletion = false;

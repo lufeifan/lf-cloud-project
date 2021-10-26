@@ -2,6 +2,8 @@ package com.lf.generate.entity;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 表信息
  *
@@ -38,5 +40,10 @@ public class TableInfo {
     /**
      * 是否去除前缀
      */
-    private Boolean isRemovePrefix;
+    private Boolean isRemovePrefix = false;
+
+    /**
+     * 生成列信息
+     */
+    private List<ColumnInfo> columnInfos;
 }
