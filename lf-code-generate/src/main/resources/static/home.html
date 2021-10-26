@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Code Generate</title>
+    <script src="./js/vue.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="./js/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <el-form size="mini" :inline="true" :model="dbConfig" class="demo-form-inline">
+            <el-form-item label="用户名">
+                <el-input v-model="dbConfig.username" ></el-input>
+            </el-form-item>
+            <el-form-item label="密码">
+                <el-input v-model="dbConfig.password"></el-input>
+            </el-form-item>
+            <el-form-item label="地址">
+                <el-input v-model="dbConfig.url"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">连接数据库</el-button>
+            </el-form-item>
+        </el-form>
+        <el-divider></el-divider>
+        <el-table size="mini" :data="tableData" style="width: 100%" @selection-change="selectionChange">
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column type="expand">
+                <template slot-scope="props">
+<!--                    {{props.row.columnInfo}}-->
+                    <el-table row-class-name="#FFC107" size="mini" :data="props.row.columnInfos" style="width: 100%">
+                        <el-table-column prop="columnName" label="列名" width="180"></el-table-column>
+                        <el-table-column prop="columnRemarks" label="注释" width="180"></el-table-column>
+                        <el-table-column prop="columnJavaName" label="JavaName" width="180"></el-table-column>
+                        <el-table-column prop="columnJavaType" label="JavaType" width="180"></el-table-column>
+                    </el-table>
+                </template>
+            </el-table-column>
+            <el-table-column prop="primaryKey" label="主键" width="180"></el-table-column>
+            <el-table-column prop="tableRemarks" label="注释" width="180"></el-table-column>
+            <el-table-column prop="tableName" label="表名" width="180"></el-table-column>
+
+            <el-table-column label="是否去除前缀" width="180">
+                <template slot-scope="scope">
+                    <el-switch
+                            v-model="scope.row.isRemovePrefix"
+                            active-color="#13ce66"
+                            inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+            </el-table-column>
+
+<!--            <el-table-column prop="tablePrefix" label="表前缀" width="180"></el-table-column>-->
+            <el-table-column prop="className" label="类名" width="180"></el-table-column>
+
+        </el-table>
+        <el-divider></el-divider>
+        <el-button v-on:click="tableConfig">配置</el-button>
+        <el-button v-on:click="codeGenerate">生成</el-button>
+
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data() {
+                return {
+                    dbConfig: {
+                        username:"root",
+                        password:"root",
+                        url:"jdbc:mysql://localhost:3307/test?useSSL=false&autoReconnect=true&useUnicode=true&serverTimezone=UTC&characterEncoding=UTF8"
+                    },
+                    tableData:[],
+                    packConfig:{
+                        tableInfoList:[],
+                        packageName:"com.lf.code",
+                        moduleName:"code"
+                    }
+                }
+            },
+            methods: {
+                onSubmit() {
+                    axios({
+                        method: 'post',
+                        url: '/tableInfo',
+                        data: this.dbConfig,
+                    }).then(res =>{
+                        console.log(res.data.data)
+                        this.tableData = res.data.data
+                    })
+                },
+                tableConfig(){
+                    axios({
+                        method: 'post',
+                        url: '/generateConfig',
+                        data: {
+                            dbInfo:this.dbConfig,
+                            tableInfo:this.tableData
+                        },
+                    }).then(res =>{
+                        console.log(res.data.data)
+                        this.tableData = res.data.data.tableInfo
+                    })
+                },
+                // 获取选中行
+                selectionChange(selection) {
+                    this.packConfig.tableInfoList = selection;
+                },
+                codeGenerate(){
+                    axios({
+                        method: 'post',
+                        url: '/generateCode',
+                        data:this.packConfig,
+                        responseType: 'blob'
+                    }).then(response =>{
+                        var filename = response.headers//下载后文件名
+                        console.log(response.headers['content-type']);
+                        filename = filename["content-disposition"]
+                        filename = decodeURI(filename.split(";")[1].split("filename=")[1]);
+                        var blob = new Blob([response.data], { type: response.headers['content-type'] })
+                        var downloadElement = document.createElement('a');
+                        var href = URL.createObjectURL(blob); //创建下载的链接
+                        downloadElement.href = href;
+                        downloadElement.download = filename
+                        document.body.appendChild(downloadElement);
+                        downloadElement.click(); //点击下载
+                        document.body.removeChild(downloadElement); //下载完成移除元素
+                        URL.revokeObjectURL(href); //释放掉blob对象
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
