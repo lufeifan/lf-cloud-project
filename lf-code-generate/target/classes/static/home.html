@@ -1,0 +1,230 @@
+<meta charset="UTF-8" />
+<title>Code Generate</title>
+<script src="./js/vue.js"></script>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="./js/axios.min.js"></script>
+
+<link href="http://cdn.bootcss.com/highlight.js/8.0/styles/monokai_sublime.min.css" rel="stylesheet">
+<script src="http://cdn.bootcss.com/highlight.js/8.0/highlight.min.js"></script>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/vue-clipboard2/0.3.1/vue-clipboard.min.js"></script>
+<div id="app">
+    <el-form size="mini" :inline="true" :model="dbConfig" class="demo-form-inline">
+        <el-form-item label="用户名">
+            <el-input v-model="dbConfig.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+            <el-input v-model="dbConfig.password"></el-input>
+        </el-form-item>
+        <el-form-item label="地址">
+            <el-input v-model="dbConfig.url"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">连接数据库</el-button>
+        </el-form-item>
+    </el-form>
+    <el-button size="mini" v-on:click="tableConfig">配置</el-button>
+
+    <el-divider></el-divider>
+    <el-table size="mini" :data="tableData" style="width: 100%" @selection-change="selectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="expand">
+            <template slot-scope="props">
+                <el-table row-class-name="#FFC107" size="mini" :data="props.row.columnInfos" style="width: 100%">
+                    <el-table-column prop="columnName" label="列名" width="180"></el-table-column>
+                    <el-table-column prop="columnRemarks" label="注释" width="180"></el-table-column>
+                    <el-table-column prop="columnJavaName" label="JavaName" width="180"></el-table-column>
+                    <el-table-column prop="columnJavaType" label="JavaType" width="180"></el-table-column>
+                    <el-table-column label="开启自动填充注解" width="180">
+                        <template slot-scope="scope">
+                            <el-switch v-model="scope.row.isAutoInsertFill" active-color="#13ce66" inactive-color="#ff4949">
+                            </el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="开启自动更新注解" width="180">
+                        <template slot-scope="scope">
+                            <el-switch v-model="scope.row.isAutoUpdateFile" active-color="#13ce66" inactive-color="#ff4949">
+                            </el-switch>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="开启逻辑删除注解" width="180">
+                        <template slot-scope="scope">
+                            <el-switch v-model="scope.row.isLogicalDeletion" active-color="#13ce66" inactive-color="#ff4949">
+                            </el-switch>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+        </el-table-column>
+        <el-table-column prop="primaryKey" label="主键" width="180"></el-table-column>
+        <el-table-column prop="tableRemarks" label="注释" width="180"></el-table-column>
+        <el-table-column prop="tableName" label="表名" width="180"></el-table-column>
+        <el-table-column label="是否去除前缀" width="180">
+            <template slot-scope="scope">
+                <el-switch v-model="scope.row.isRemovePrefix" active-color="#13ce66" inactive-color="#ff4949">
+                </el-switch>
+            </template>
+        </el-table-column>
+        <!--            <el-table-column prop="tablePrefix" label="表前缀" width="180"></el-table-column>-->
+        <el-table-column prop="className" label="类名" width="180"></el-table-column>
+        <el-table-column label="预览">
+            <template slot-scope="scope">
+                <el-button size="mini" type="success" @click="showPreview(scope.row)">
+                    预览
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+    <el-divider></el-divider>
+    <el-button v-on:click="codeGenerate">生成</el-button>
+
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="60%">
+        <el-tabs v-model="activeName" @tab-click="handleClicks">
+            <el-tab-pane label="entity" name="entity"></el-tab-pane>
+            <el-tab-pane label="mapper" name="mapper"></el-tab-pane>
+            <el-tab-pane label="server" name="server"></el-tab-pane>
+            <el-tab-pane label="Impl" name="Impl"></el-tab-pane>
+        </el-tabs>
+        <el-button type="success" size="mini" round v-clipboard:copy="Marked" v-clipboard:success="onCopy"
+            v-clipboard:error="onError">
+            复制
+        </el-button>
+        <pre v-highlight>
+            <code class="java" v-html="Marked">
+            </code>
+        </pre>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </span>
+    </el-dialog>
+</div>
+<script>
+    hljs.initHighlightingOnLoad();
+    new Vue({
+        el: '#app',
+        component: {
+            VueClipboard,
+        },
+        directives: {
+            highlight: function (el) {
+                let blocks = el.querySelectorAll('pre code');
+                blocks.forEach(block => {
+                    hljs.highlightBlock(block);
+                });
+            },
+        },
+        data() {
+            return {
+                dbConfig: {
+                    username: 'root',
+                    password: 'root',
+                    url:
+                        'jdbc:mysql://localhost:3307/test?useSSL=false&autoReconnect=true&useUnicode=true&serverTimezone=UTC&characterEncoding=UTF8',
+                },
+                tableData: [],
+                selectDates:[],
+                packConfig: {
+                    packageName: 'com.lf.code',
+                    moduleName: 'code',
+                    dbInfo: ""
+                },
+                detail: {
+                    address: '地址',
+                    name: '名字',
+                    phone: '1234567',
+                },
+                Marked:null,
+                dialogVisible: false,
+                activeName: 'entity',
+                showTable: null
+            };
+        },
+        methods: {
+            onSubmit() {
+                axios({
+                    method: 'post',
+                    url: '/tableInfo',
+                    data: {
+                        dbInfo:this.dbConfig,
+                        packInfo:this.packConfig
+                    },
+                }).then(res => {
+                    this.tableData = res.data.data;
+                });
+            },
+            tableConfig() {
+                axios({
+                    method: 'post',
+                    url: '/generateConfig',
+                    data: this.tableData
+                }).then(res => {
+                    this.tableData = res.data.data;
+                });
+            },
+            // 获取选中行
+            selectionChange(selection) {
+                this.selectDates = selection;
+            },
+            codeGenerate() {
+                axios({
+                    method: 'post',
+                    url: '/generateCode',
+                    data: {
+                        packInfo:this.packConfig,
+                        tableInfos:this.selectDates
+                    },
+                    responseType: 'blob',
+                }).then(response => {
+                    var filename = response.headers; //下载后文件名
+                    console.log(response.headers['content-type']);
+                    filename = filename['content-disposition'];
+                    filename = decodeURI(filename.split(';')[1].split('filename=')[1]);
+                    var blob = new Blob([response.data], { type: response.headers['content-type'] });
+                    var downloadElement = document.createElement('a');
+                    var href = URL.createObjectURL(blob); //创建下载的链接
+                    downloadElement.href = href;
+                    downloadElement.download = filename;
+                    document.body.appendChild(downloadElement);
+                    downloadElement.click(); //点击下载
+                    document.body.removeChild(downloadElement); //下载完成移除元素
+                    URL.revokeObjectURL(href); //释放掉blob对象
+                });
+            },
+            onCopy: function (e) {
+                this.$message({
+                    message: '复制成功',
+                    type: 'success',
+                });
+            },
+            onError: function (e) {
+                console.log(e);
+                alert('Failed to copy texts');
+            },
+            // 预览
+            preview(row) {
+                axios({
+                    method: 'post',
+                    url: '/preview/' + this.activeName,
+                    data: {
+                        packInfo:this.packConfig,
+                        tableInfos:row
+                    },
+                }).then(response => {
+                    this.Marked = response.data;
+                });
+            },
+            showPreview(row) {
+                this.dialogVisible = true;
+                this.preview(row);
+                this.showTable = row
+            },
+            handleClicks() {
+                this.preview(this.showTable);
+            }
+        },
+    });
+</script>
