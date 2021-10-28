@@ -2,8 +2,6 @@ package com.lf.generate.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * 数据库信息
  *

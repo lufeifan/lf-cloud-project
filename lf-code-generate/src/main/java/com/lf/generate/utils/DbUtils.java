@@ -40,10 +40,10 @@ public class DbUtils {
      * @return
      * @throws SQLException
      */
-    public static List<TableInfo> getTableInfo(Connection conn) throws SQLException {
+    public static List<TableInfo> getTableInfo(Connection conn,String table) throws SQLException {
         List<TableInfo> tableInfoList = new ArrayList<>();
         DatabaseMetaData metaData = conn.getMetaData();
-        ResultSet tables = metaData.getTables(conn.getCatalog(), null, null, new String[]{"TABLE"});
+        ResultSet tables = metaData.getTables(conn.getCatalog(), null, table, new String[]{"TABLE"});
         while (tables.next()) {
             TableInfo tableInfo = new TableInfo();
 
@@ -61,6 +61,10 @@ public class DbUtils {
             tableInfoList.add(tableInfo);
         }
         return tableInfoList;
+    }
+
+    public static List<TableInfo> getTableInfo(Connection conn) throws SQLException {
+        return getTableInfo(conn,null);
     }
 
     public static List<ColumnInfo> getColumnInfo(Connection conn,String tableName) throws SQLException, ConfigurationException {

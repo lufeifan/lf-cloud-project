@@ -1,6 +1,9 @@
 package com.lf.generate.service;
 
-import com.lf.generate.entity.GenerateInfo;
+import com.lf.generate.entity.ColumnInfo;
+import com.lf.generate.entity.TableInfo;
+
+import java.util.List;
 
 /**
  * 生成信息接口
@@ -10,9 +13,15 @@ import com.lf.generate.entity.GenerateInfo;
  **/
 public interface GenerateConfigService {
     /**
-     * 生成信息配置
-     * @param info
+     * 生成表信息配置
+     * @param tableInfo
      * @return
      */
-    GenerateInfo generateConfig(GenerateInfo info);
+    void classGenerateConfig(TableInfo tableInfo);
+
+    /**
+     * 生成列信息配置
+     * @param columnInfoList
+     */
+    void fieldGenerateConfig(List<ColumnInfo> columnInfoList);
 }

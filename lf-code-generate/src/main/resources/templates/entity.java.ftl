@@ -29,6 +29,15 @@ public class ${className} implements Serializable {
     @TableId(type = IdType.AUTO)
         </#if>
     </#if>
+    <#if  li.isAutoInsertFill>
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    </#if>
+    <#if  li.isAutoUpdateFile>
+    @TableField(fill = FieldFill.UPDATE)
+    </#if>
+    <#if  li.isLogicalDeletion>
+
+    </#if>
     @ApiModelProperty(value = "${li.columnRemarks?default("")}")
     private ${li.columnJavaType} ${li.columnJavaName};
 

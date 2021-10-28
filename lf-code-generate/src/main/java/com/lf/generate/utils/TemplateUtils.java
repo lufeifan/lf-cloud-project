@@ -1,13 +1,15 @@
 package com.lf.generate.utils;
 
 import com.google.common.base.CaseFormat;
-import com.lf.generate.entity.ConfigInfo;
+import com.lf.generate.entity.PackInfo;
 import com.lf.generate.entity.TableInfo;
+import com.lf.generate.vo.GenerateInfoVo;
 import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+import javax.servlet.ServletOutputStream;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +23,11 @@ import java.util.zip.ZipOutputStream;
  */
 public class TemplateUtils {
 
-    public static ByteArrayOutputStream fillTemplate(ConfigInfo info, ByteArrayOutputStream outputStream) throws IOException, TemplateException {
+    public static void fillTemplate(GenerateInfoVo info, OutputStream outputStream) throws IOException, TemplateException {
         List<Template> templateList = initTemplate();
-        List<TableInfo> tableInfoList = info.getTableInfoList();
+        List<TableInfo> tableInfoList = info.getTableInfos();
         for (TableInfo tableInfo : tableInfoList) {
-            Map<String, Object> mapData = getMapData(info, tableInfo);
+            Map<String, Object> mapData = getMapData(info.getPackInfo(), tableInfo);
             for (Template template : templateList) {
                 ZipOutputStream zip = new ZipOutputStream(outputStream);
                 String path = initPath(template, mapData.get("packageName").toString(), mapData.get("className").toString());
@@ -34,24 +36,9 @@ public class TemplateUtils {
                 zip.closeEntry();
             }
         }
-        return outputStream;
-//        List<Template> templateList;
-//        try {
-//            templateList = TemplateUtils.initTemplate();
-//            for (Template template : templateList) {
-////                ZipOutputStream zip = new ZipOutputStream(outputStream);
-//                String path = TemplateUtils.initPath(template, info.getPackageName(), info.getClassName());
-////                zip.putNextEntry(new ZipEntry(path));
-////                template.process(info, new OutputStreamWriter(zip));
-////                zip.closeEntry();
-//            }
-//        } catch (IOException | TemplateException e) {
-//            e.printStackTrace();
-//        }
-//        return outputStream;
     }
 
-    public static Map<String,Object> getMapData(ConfigInfo configInfo,TableInfo tableInfo){
+    public static Map<String,Object> getMapData(PackInfo configInfo, TableInfo tableInfo){
         Map<String,Object> map = new HashMap<>(20);
         map.put("packageName",configInfo.getPackageName());
         map.put("date",configInfo.getDate());

@@ -1,6 +1,9 @@
 package com.lf.generate.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import org.apache.ibatis.annotations.Insert;
 
 /**
  * 列信息

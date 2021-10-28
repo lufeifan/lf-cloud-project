@@ -11,6 +11,7 @@
         <module name="lf-common-cache" />
         <module name="lf-common-feign" />
         <module name="lf-test-log" />
+        <module name="lf-common-entity" />
         <module name="lf-common-resource-auth" />
         <module name="lf-code-generate" />
         <module name="lf-test-feign" />
@@ -18,12 +19,11 @@
         <module name="lf-test-mybatisPlus" />
         <module name="lf-common-log" />
         <module name="lf-common-core" />
-        <module name="lf-common-swagger" />
         <module name="lf-common-mybatisPlus" />
         <module name="lf-system-api" />
         <module name="lf-test-auth" />
         <module name="lf-gateway" />
-        <module name="lf-common-entity" />
+        <module name="lf-common-swagger" />
         <module name="lf-system-admin" />
       </profile>
     </annotationProcessing>
