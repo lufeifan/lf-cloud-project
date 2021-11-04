@@ -31,6 +31,8 @@ public class ColumnInfo {
      */
     private Boolean isAutoInsertFill = false;
 
+    private Boolean isAutoInsertAndUpdateFill = false;
+
     /**
      * 是否 自动更新填充
      */

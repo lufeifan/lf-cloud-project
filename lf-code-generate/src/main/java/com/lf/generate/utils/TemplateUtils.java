@@ -69,12 +69,12 @@ public class TemplateUtils {
         list.add(cfg.getTemplate("serviceImpl.java.ftl"));
         list.add(cfg.getTemplate("mapper.java.ftl"));
         list.add(cfg.getTemplate("controller.java.ftl"));
-        return list;
+        list.add(cfg.getTemplate("api.java.ftl"));
 
-//        list.add(cfg.getTemplate("vue.java.ftl"));
-//        list.add(cfg.getTemplate("addOrUpdate.java.ftl"));
-//        list.add(cfg.getTemplate("api.java.ftl"));
-//        list.add(cfg.getTemplate("sql.java.ftl"));
+        list.add(cfg.getTemplate("vue.java.ftl"));
+        list.add(cfg.getTemplate("addOrUpdate.java.ftl"));
+        list.add(cfg.getTemplate("sql.java.ftl"));
+        return list;
     }
 
     /**

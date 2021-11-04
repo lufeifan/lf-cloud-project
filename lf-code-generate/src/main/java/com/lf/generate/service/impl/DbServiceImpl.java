@@ -26,6 +26,7 @@ public class DbServiceImpl implements DbService {
 //      获取 Connection 对象
         Connection conn = DbUtils.getConnect(dbInfo);
         List<TableInfo> tableInfo = DbUtils.getTableInfo(conn);
+        conn.close();
         return tableInfo;
     }
 
@@ -33,6 +34,7 @@ public class DbServiceImpl implements DbService {
     public List<ColumnInfo> columnInfo(DbInfo dbInfo, String tableName) throws SQLException, ConfigurationException {
         Connection conn = DbUtils.getConnect(dbInfo);
         List<ColumnInfo> infoList = DbUtils.getColumnInfo(conn, tableName);
+        conn.close();
         return infoList;
     }
 

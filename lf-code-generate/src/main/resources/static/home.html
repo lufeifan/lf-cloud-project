@@ -25,46 +25,33 @@
         <el-form-item>
             <el-button type="primary" @click="onSubmit">连接数据库</el-button>
         </el-form-item>
+    </el-form >
+
+    <el-form size="mini" :inline="true" :model="packConfig" class="demo-form-inline">
+        <el-form-item label="packageName">
+            <el-input v-model="packConfig.packageName"></el-input>
+        </el-form-item>
+        <el-form-item label="moduleName">
+            <el-input v-model="packConfig.moduleName"></el-input>
+        </el-form-item>
+        <el-form-item label="userName">
+            <el-input v-model="packConfig.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="email">
+            <el-input v-model="packConfig.email"></el-input>
+        </el-form-item>
     </el-form>
     <el-button size="mini" v-on:click="tableConfig">配置</el-button>
 
     <el-divider></el-divider>
-    <el-table size="mini" :data="tableData" style="width: 100%" @selection-change="selectionChange">
+    <el-table size="mini" :data="tableData" style="width: 100%" @selection-change="selectionChange" @row-click="rowClick">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column type="expand">
-            <template slot-scope="props">
-                <el-table row-class-name="#FFC107" size="mini" :data="props.row.columnInfos" style="width: 100%">
-                    <el-table-column prop="columnName" label="列名" width="180"></el-table-column>
-                    <el-table-column prop="columnRemarks" label="注释" width="180"></el-table-column>
-                    <el-table-column prop="columnJavaName" label="JavaName" width="180"></el-table-column>
-                    <el-table-column prop="columnJavaType" label="JavaType" width="180"></el-table-column>
-                    <el-table-column label="开启自动填充注解" width="180">
-                        <template slot-scope="scope">
-                            <el-switch v-model="scope.row.isAutoInsertFill" active-color="#13ce66" inactive-color="#ff4949">
-                            </el-switch>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="开启自动更新注解" width="180">
-                        <template slot-scope="scope">
-                            <el-switch v-model="scope.row.isAutoUpdateFile" active-color="#13ce66" inactive-color="#ff4949">
-                            </el-switch>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="开启逻辑删除注解" width="180">
-                        <template slot-scope="scope">
-                            <el-switch v-model="scope.row.isLogicalDeletion" active-color="#13ce66" inactive-color="#ff4949">
-                            </el-switch>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </template>
-        </el-table-column>
         <el-table-column prop="primaryKey" label="主键" width="180"></el-table-column>
         <el-table-column prop="tableRemarks" label="注释" width="180"></el-table-column>
-        <el-table-column prop="tableName" label="表名" width="180"></el-table-column>
+        <el-table-column prop="tableName" label="表名" width="200"></el-table-column>
         <el-table-column label="是否去除前缀" width="180">
             <template slot-scope="scope">
-                <el-switch v-model="scope.row.isRemovePrefix" active-color="#13ce66" inactive-color="#ff4949">
+                <el-switch @click.native.stop v-model="scope.row.isRemovePrefix" active-color="#13ce66" inactive-color="#ff4949">
                 </el-switch>
             </template>
         </el-table-column>
@@ -72,7 +59,7 @@
         <el-table-column prop="className" label="类名" width="180"></el-table-column>
         <el-table-column label="预览">
             <template slot-scope="scope">
-                <el-button size="mini" type="success" @click="showPreview(scope.row)">
+                <el-button size="mini" type="success" @click.stop="showPreview(scope.row)">
                     预览
                 </el-button>
             </template>
@@ -87,19 +74,61 @@
             <el-tab-pane label="mapper" name="mapper"></el-tab-pane>
             <el-tab-pane label="server" name="server"></el-tab-pane>
             <el-tab-pane label="Impl" name="Impl"></el-tab-pane>
+            <el-tab-pane label="Api" name="api"></el-tab-pane>
+            <el-tab-pane label="vue" name="vue"></el-tab-pane>
+            <el-tab-pane label="addOrUpdate" name="addOrUpdate"></el-tab-pane>
+            <el-tab-pane label="Sql" name="sql"></el-tab-pane>
+            <el-tab-pane label="vueSinglePage" name="vueSinglePage"></el-tab-pane>
         </el-tabs>
         <el-button type="success" size="mini" round v-clipboard:copy="Marked" v-clipboard:success="onCopy"
             v-clipboard:error="onError">
             复制
         </el-button>
         <pre v-highlight>
-            <code class="java" v-html="Marked">
+            <code class="java" v-text="Marked">
             </code>
         </pre>
         <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">取 消</el-button>
             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
         </span>
+    </el-dialog>
+
+    <el-dialog title="提示" :visible.sync="classInfoVisible" width="80%">
+        <el-table row-class-name="#FFC107" size="mini" :data="rowInfo" style="width: 100%">
+            <el-table-column prop="columnName" label="列名" width="180"></el-table-column>
+            <el-table-column prop="columnRemarks" label="注释" width="180"></el-table-column>
+            <el-table-column prop="columnJavaName" label="JavaName" width="180"></el-table-column>
+            <el-table-column prop="columnJavaType" label="JavaType" width="180"></el-table-column>
+
+            <el-table-column label="开启自动填充注解">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.isAutoInsertFill" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="开启自动插入更新注解" >
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.isAutoInsertAndUpdateFill" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="开启自动更新注解">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.isAutoUpdateFile" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="开启逻辑删除注解">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.isLogicalDeletion" active-color="#13ce66" inactive-color="#ff4949">
+                    </el-switch>
+                </template>
+            </el-table-column>
+        </el-table>
     </el-dialog>
 </div>
 <script>
@@ -129,8 +158,7 @@
                 selectDates:[],
                 packConfig: {
                     packageName: 'com.lf.code',
-                    moduleName: 'code',
-                    dbInfo: ""
+                    moduleName: 'code'
                 },
                 detail: {
                     address: '地址',
@@ -140,7 +168,9 @@
                 Marked:null,
                 dialogVisible: false,
                 activeName: 'entity',
-                showTable: null
+                showTable: null,
+                classInfoVisible:false,
+                rowInfo:null
             };
         },
         methods: {
@@ -170,6 +200,7 @@
                 this.selectDates = selection;
             },
             codeGenerate() {
+                if (this.selectDates.length==0) return
                 axios({
                     method: 'post',
                     url: '/generateCode',
@@ -224,6 +255,11 @@
             },
             handleClicks() {
                 this.preview(this.showTable);
+            },
+            rowClick(row){
+                console.log(row)
+                this.rowInfo = row.columnInfos
+                this.classInfoVisible = true
             }
         },
     });

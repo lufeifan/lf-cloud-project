@@ -1,6 +1,7 @@
 package com.lf.generate.controller;
 
 import com.lf.common.core.utils.R;
+import com.lf.generate.config.Type;
 import com.lf.generate.entity.*;
 import com.lf.generate.service.DbService;
 import com.lf.generate.service.GenerateConfigService;
@@ -15,10 +16,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CommonsLogWriter;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +63,7 @@ public class GenerateController {
     @PostMapping("/generateCode")
     public void generateCode(@RequestBody GenerateInfoVo configInfo, HttpServletResponse response) throws IOException, TemplateException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        if (configInfo.getTableInfos().size() == 0) return;
         TemplateUtils.fillTemplate(configInfo, outputStream);
         byte[] data = outputStream.toByteArray();
         response.setHeader("Content-Disposition", "attachment; filename=lf_code_generator.zip");
@@ -94,19 +93,40 @@ public class GenerateController {
         cfg.setTemplateLoader(new ClassTemplateLoader(GenerateController.class, "/templates"));
         cfg.setDefaultEncoding("UTF-8");
         Template template = null;
-        if ("entity".equals(type)) {
+        if (Type.ENTITY.getType().equals(type)) {
             template = cfg.getTemplate("entity.java.ftl");
         }
-        if ("mapper".equals(type)) {
+        if (Type.MAPPER.getType().equals(type)) {
             template = cfg.getTemplate("mapper.java.ftl");
         }
-        if ("server".equals(type)) {
+        if (Type.SERVER.getType().equals(type)) {
             template = cfg.getTemplate("service.java.ftl");
         }
-        if ("Impl".equals(type)) {
+        if (Type.SERVICE_IMPL.getType().equals(type)) {
             template = cfg.getTemplate("serviceImpl.java.ftl");
+        }
+        if (Type.API.getType().equals(type)) {
+            template = cfg.getTemplate("api.java.ftl");
+        }
+        if (Type.VUE.getType().equals(type)) {
+            template = cfg.getTemplate("vue.java.ftl");
+        }
+        if (Type.UPDATE_ADD.getType().equals(type)) {
+            template = cfg.getTemplate("addOrUpdate.java.ftl");
+        }
+        if (Type.SQl.getType().equals(type)) {
+            template = cfg.getTemplate("sql.java.ftl");
+        }
+        if ("vueSinglePage".equals(type)) {
+            template = cfg.getTemplate("vueSinglePage.java.ftl");
         }
         ServletOutputStream outputStream = response.getOutputStream();
         template.process(mapData, new OutputStreamWriter(outputStream));
+    }
+
+    @CrossOrigin
+    @RequestMapping("/test")
+    public R test(){
+        return R.ok();
     }
 }

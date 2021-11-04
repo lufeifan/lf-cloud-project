@@ -13,6 +13,7 @@ import java.util.Date;
 /**
 *  @author ${userName}
 *  ${date}
+*  @email ${email}
 **/
 
 @Data
@@ -28,6 +29,9 @@ public class ${className} implements Serializable {
         <#if "${primaryKey}"==li.columnName>
     @TableId(type = IdType.AUTO)
         </#if>
+    </#if>
+    <#if  li.isAutoInsertFill>
+    @TableField(fill = FieldFill.INSERT)
     </#if>
     <#if  li.isAutoInsertFill>
     @TableField(fill = FieldFill.INSERT_UPDATE)
