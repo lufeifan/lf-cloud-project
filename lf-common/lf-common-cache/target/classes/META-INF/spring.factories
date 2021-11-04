@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.lf.common.mybatisPlus.LfMybatisPlusAutoConfiguration
+  com.lf.common.cache.config.LfCacheConfiguration
